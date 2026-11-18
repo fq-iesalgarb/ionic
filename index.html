@@ -127,12 +127,12 @@
     main {
       max-width: 1240px;
       width: 100%;
-      margin: 0.9rem auto;
+      margin: 0.85rem auto;
       padding: 0 1rem;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 0.8rem;
     }
 
     /* Selectors d'elements */
@@ -140,7 +140,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 0.75rem 1.1rem;
+      padding: 0.7rem 1.1rem;
       box-shadow: var(--shadow);
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -151,7 +151,7 @@
     .select-group {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.2rem;
     }
 
     .select-group label {
@@ -165,7 +165,7 @@
     .label-nonmetal { color: var(--nonmetal-color); }
 
     select {
-      padding: 0.45rem 0.7rem;
+      padding: 0.42rem 0.7rem;
       border-radius: 8px;
       border: 1px solid var(--border-color);
       background: var(--bg-subtle);
@@ -179,7 +179,7 @@
       outline: 2px solid var(--primary);
     }
 
-    /* Explicació didàctica de la fase */
+    /* Explicació didàctica amb ALÇADA CONSTANT perquè els botons no es moguin mai */
     .didactic-banner {
       background: var(--bg-card);
       border-left: 5px solid var(--primary);
@@ -187,19 +187,25 @@
       border-right: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 0.75rem 1.1rem;
+      padding: 0.65rem 1.1rem;
       box-shadow: var(--shadow);
+      height: 92px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
     }
 
     .didactic-banner h2 {
-      font-size: 1rem;
-      margin-bottom: 0.2rem;
+      font-size: 0.98rem;
+      margin-bottom: 0.22rem;
       color: var(--primary);
     }
 
     .didactic-banner p {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--text-main);
+      line-height: 1.4;
     }
 
     /* Zona central: Simulació + Botons de fase al costat */
@@ -213,6 +219,10 @@
     @media (max-width: 860px) {
       .workspace-grid {
         grid-template-columns: 1fr;
+      }
+      .didactic-banner {
+        height: auto;
+        min-height: 92px;
       }
     }
 
@@ -231,7 +241,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1.1rem;
-      padding: 0.55rem 1rem;
+      padding: 0.52rem 1rem;
       background: var(--bg-subtle);
       border-bottom: 1px solid var(--border-color);
       font-size: 0.82rem;
@@ -261,7 +271,7 @@
 
     #bohr-svg {
       width: 100%;
-      height: 390px;
+      height: 395px;
       display: block;
     }
 
@@ -393,7 +403,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      padding: 0.8rem 1.1rem;
+      padding: 0.75rem 1.1rem;
       box-shadow: var(--shadow);
     }
 
@@ -404,14 +414,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.45rem;
+      margin-bottom: 0.4rem;
       padding-bottom: 0.35rem;
       border-bottom: 1px solid var(--border-color);
     }
 
     .config-title {
       font-weight: 700;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
     }
 
     .badge-group {
@@ -425,7 +435,7 @@
     .nonmetal-card .badge-group { background: var(--nonmetal-bg); color: var(--nonmetal-color); }
 
     .config-row {
-      margin: 0.3rem 0;
+      margin: 0.28rem 0;
       font-size: 0.88rem;
     }
 
@@ -443,7 +453,7 @@
       color: var(--text-muted);
       border-top: 1px solid var(--border-color);
       background: var(--bg-card);
-      margin-top: 1rem;
+      margin-top: 0.8rem;
     }
 
     @keyframes pulseVacancy {
@@ -486,7 +496,7 @@
       </div>
     </section>
 
-    <!-- Explicació didàctica dinàmica -->
+    <!-- Explicació didàctica dinàmica amb alçada fixa -->
     <section class="didactic-banner" id="didactic-banner">
       <h2 id="step-title">Carregant...</h2>
       <p id="step-desc"></p>
@@ -500,7 +510,7 @@
           <div class="legend-item"><span class="dot dot-nonmetal"></span> Electrons del no-metall</div>
           <div class="legend-item" id="legend-vacancy" style="display:none;"><span class="dot dot-vacancy"></span> Buits a l'última capa (octet)</div>
         </div>
-        <svg id="bohr-svg" viewBox="0 0 820 390" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg id="bohr-svg" viewBox="0 0 820 395" preserveAspectRatio="xMidYMid meet"></svg>
       </div>
 
       <aside class="phases-sidebar" aria-label="Fases de l'enllaç iònic">
@@ -704,8 +714,9 @@
       const totalElectrons = lcm(metal.valence, nonmetal.needed);
       const nMetal = totalElectrons / metal.valence;
       const nNonmetal = totalElectrons / nonmetal.needed;
-      const formula = `${metal.symbol}${nMetal > 1 ? '_' + nMetal : ''}${nonmetal.symbol}${nNonmetal > 1 ? '_' + nNonmetal : ''}`;
-      return { nMetal, nNonmetal, totalElectrons, formula };
+      // Format LaTeX correcte sense guions baixos dins de \text{}
+      const formulaLatex = `\\text{${metal.symbol}}${nMetal > 1 ? '_' + nMetal : ''}\\text{${nonmetal.symbol}}${nNonmetal > 1 ? '_' + nNonmetal : ''}`;
+      return { nMetal, nNonmetal, totalElectrons, formulaLatex };
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -817,14 +828,14 @@
       const s = state.step;
       if (s === 1) {
         titleEl.textContent = `Pas 1: Estat inicial dels àtoms neutres (${m.name} i ${nm.name})`;
-        descEl.innerHTML = `Tenim un àtom neutre de <strong>${m.name}</strong> (${mInline(m.symbol)}, grup ${m.group}) amb <strong>${m.valence}</strong> ${m.valence === 1 ? 'electró' : 'electrons'} a la seva capa de valència, i un àtom neutre de <strong>${nm.name}</strong> (${mInline(nm.symbol)}, grup ${nm.group}) amb <strong>${nm.valence}</strong> electrons de valència. Observa les seves configuracions electròniques a la part inferior.`;
+        descEl.innerHTML = `Tenim un àtom neutre de <strong>${m.name}</strong> (${mInline(`\\text{${m.symbol}}`)}, grup ${m.group}) amb <strong>${m.valence}</strong> ${m.valence === 1 ? 'electró' : 'electrons'} a la seva capa de valència, i un àtom neutre de <strong>${nm.name}</strong> (${mInline(`\\text{${nm.symbol}}`)}, grup ${nm.group}) amb <strong>${nm.valence}</strong> electrons de valència. Observa les seves configuracions electròniques a la part inferior.`;
       } else if (s === 2) {
         titleEl.textContent = `Pas 2: Quants electrons sobren i quants en falten?`;
         descEl.innerHTML = `Per assolir l'estabilitat de gas noble: al <strong>${m.name}</strong> li <strong>sobren ${m.valence} ${m.valence === 1 ? 'electró' : 'electrons'}</strong> (per quedar-se amb estructura de ${mInline(m.stableRule)}), mentre que al <strong>${nm.name}</strong> li <strong>falten ${nm.needed} ${nm.needed === 1 ? 'electró' : 'electrons'}</strong> (marcats com a buits discontinus) per completar el seu octet.`;
       } else if (s === 3) {
         titleEl.textContent = `Pas 3: Ajust estequiomètric (proporció d'àtoms necessaris)`;
         if (st.nMetal === 1 && st.nNonmetal === 1) {
-          descEl.innerHTML = `Com que el ${m.name} cedeix <strong>${m.valence}</strong> ${m.valence === 1 ? 'electró' : 'electrons'} i el ${nm.name} en necessita exactament <strong>${nm.needed}</strong>, el balanç ja és perfecte amb <strong>1 àtom de ${mInline(m.symbol)}</strong> i <strong>1 àtom de ${mInline(nm.symbol)}</strong>!`;
+          descEl.innerHTML = `Com que el ${m.name} cedeix <strong>${m.valence}</strong> ${m.valence === 1 ? 'electró' : 'electrons'} i el ${nm.name} en necessita exactament <strong>${nm.needed}</strong>, el balanç ja és perfecte amb <strong>1 àtom de ${mInline(`\\text{${m.symbol}}`)}</strong> i <strong>1 àtom de ${mInline(`\\text{${nm.symbol}}`)}</strong>!`;
         } else {
           descEl.innerHTML = `Un sol àtom de cada no quadra els comptes! Perquè tots els electrons cedits siguin captats sense que en sobri ni en falti cap (mínim comú múltiple = ${st.totalElectrons} electrons), necessitam <strong>${st.nMetal} ${st.nMetal === 1 ? 'àtom' : 'àtoms'} de ${m.name}</strong> (${st.nMetal} × ${m.valence} = ${st.totalElectrons} e⁻ cedits) i <strong>${st.nNonmetal} ${st.nNonmetal === 1 ? 'àtom' : 'àtoms'} de ${nm.name}</strong> (${st.nNonmetal} × ${nm.needed} = ${st.totalElectrons} e⁻ captats).`;
         }
@@ -832,16 +843,18 @@
         titleEl.textContent = `Pas 4: Transferència d'electrons (el "viatge")`;
         descEl.innerHTML = `Els <strong>${st.totalElectrons} ${st.totalElectrons === 1 ? 'electró' : 'electrons'}</strong> de valència del metall (en <span style="color:var(--metal-color);font-weight:700;">taronja ambre</span>) viatgen cap a l'última capa del no-metall, omplint els seus buits al costat dels electrons propis del no-metall (en <span style="color:var(--nonmetal-color);font-weight:700;">blau cian</span>).`;
       } else if (s === 5) {
-        const catChargeStr = m.charge === 1 ? '+' : `${m.charge}+`;
-        const anChargeStr = nm.charge === -1 ? '-' : `${Math.abs(nm.charge)}-`;
-        titleEl.textContent = `Pas 5: Formació del Catió i l'Anió`;
-        descEl.innerHTML = `En perdre electrons, el metall es transforma en el catió ${mInline(`${m.symbol}^{${catChargeStr}}`)} (la seva antiga capa de valència desapareix i queda amb configuració ${mInline(m.ionShortConfig)}). En guanyar electrons, el no-metall es converteix en l'anió ${mInline(`${nm.symbol}^{${anChargeStr}}`)} amb configuració d'octet ${mInline(nm.ionShortConfig)}, conservant els electrons rebuts en ambre.`;
+        const catOx = `${m.charge}+`;
+        const anOx = `${Math.abs(nm.charge)}-`;
+        titleEl.textContent = `Pas 5: Formació del Catió i l'Anió (Nombres d'oxidació)`;
+        descEl.innerHTML = `En cedir ${m.valence} ${m.valence === 1 ? 'electró' : 'electrons'}, cada àtom de metall es transforma en el catió ${mInline(`\\text{${m.symbol}}^{${catOx}}`)} (nombre d'oxidació <strong>${catOx}</strong>). En captar ${nm.needed} ${nm.needed === 1 ? 'electró' : 'electrons'}, cada àtom de no-metall es converteix en l'anió ${mInline(`\\text{${nm.symbol}}^{${anOx}}`)} (nombre d'oxidació <strong>${anOx}</strong>).`;
       } else if (s === 6) {
-        titleEl.textContent = `Pas 6: Atracció electrostàtica`;
-        descEl.innerHTML = `Els ions de càrrega oposada (cations positius i anions negatius) s'atreuen mitjançant forces electrostàtiques molt intenses, apropant-se fins a quedar units en una unitat elèctricament neutra de fórmula empírica ${mInline(`\\text{${st.formula}}`)}.`;
+        const oxM = m.charge;
+        const oxNM = Math.abs(nm.charge);
+        titleEl.textContent = `Pas 6: Atracció electrostàtica i intercanvi de nombres d'oxidació`;
+        descEl.innerHTML = `Els ions de signe contrari s'atreuen. Si intercanviam els seus nombres d'oxidació (${mInline(`\\text{${m.symbol}}^{${oxM}+}`)} i ${mInline(`\\text{${nm.symbol}}^{${oxNM}-}`)}) com a subíndexs creuats (i simplificam si cal), obtenim la fórmula del compost: ${mInline(`\\text{${m.symbol}}_{${oxNM}}\\text{${nm.symbol}}_{${oxM}} \\rightarrow ${st.formulaLatex}`)}.`;
       } else if (s === 7) {
         titleEl.textContent = `Pas 7: Xarxa cristal·lina iònica tridimensional (perspectiva cavallera)`;
-        descEl.innerHTML = `A la natura no existeixen parelles aïllades! Milions de cations ${mInline(`${m.symbol}^{${m.charge === 1 ? '+' : m.charge + '+'}}`)} i anions ${mInline(`${nm.symbol}^{${Math.abs(nm.charge) === 1 ? '-' : Math.abs(nm.charge) + '-'}}`)} s'empaqueten en les tres direccions de l'espai mantenint la proporció <strong>${st.nMetal}:${st.nNonmetal}</strong> i formant una <strong>xarxa cristal·lina tridimensional</strong> gegant.`;
+        descEl.innerHTML = `A la natura no existeixen parelles aïllades! Milions de cations ${mInline(`\\text{${m.symbol}}^{${m.charge}+}`)} i anions ${mInline(`\\text{${nm.symbol}}^{${Math.abs(nm.charge)}-}`)} s'empaqueten en les tres direccions de l'espai mantenint la proporció <strong>${st.nMetal}:${st.nNonmetal}</strong> i formant una <strong>xarxa cristal·lina tridimensional</strong> gegant.`;
       }
     }
 
@@ -849,13 +862,13 @@
       const grid = document.getElementById('configs-grid');
       const isIon = state.step >= 5;
 
-      const mCatSymbol = `${m.symbol}^{${m.charge === 1 ? '+' : m.charge + '+'}}`;
-      const nmAnSymbol = `${nm.symbol}^{${Math.abs(nm.charge) === 1 ? '-' : Math.abs(nm.charge) + '-'}}`;
+      const mCatSymbol = `\\text{${m.symbol}}^{${m.charge}+}`;
+      const nmAnSymbol = `\\text{${nm.symbol}}^{${Math.abs(nm.charge)}-}`;
 
       grid.innerHTML = `
         <div class="config-card metal-card">
           <div class="config-header">
-            <span class="config-title">${isIon ? `Catió ${m.name} (${mInline(mCatSymbol)})` : `Àtom de ${m.name} (${mInline(m.symbol)})`}</span>
+            <span class="config-title">${isIon ? `Catió ${m.name} (${mInline(mCatSymbol)})` : `Àtom de ${m.name} (${mInline(`\\text{${m.symbol}}`)})`}</span>
             <span class="badge-group">Metall · Grup ${m.group} · Z = ${m.z}</span>
           </div>
           <div class="config-row">
@@ -874,7 +887,7 @@
 
         <div class="config-card nonmetal-card">
           <div class="config-header">
-            <span class="config-title">${isIon ? `Anió ${nm.name} (${mInline(nmAnSymbol)})` : `Àtom de ${nm.name} (${mInline(nm.symbol)})`}</span>
+            <span class="config-title">${isIon ? `Anió ${nm.name} (${mInline(nmAnSymbol)})` : `Àtom de ${nm.name} (${mInline(`\\text{${nm.symbol}}`)})`}</span>
             <span class="badge-group">No-metall · Grup ${nm.group} · Z = ${nm.z}</span>
           </div>
           <div class="config-row">
@@ -887,14 +900,14 @@
           </div>
           <div class="config-row">
             <span class="config-label">Distribució per capes:</span>
-            <span>${isIon ? [...nm.shells.slice(0, -1), 8].join(' , ') + ` (${mInline('octet')})` : nm.shells.join(' , ')}</span>
+            <span>${isIon ? [...nm.shells.slice(0, -1), 8].join(' , ') + ` (${mInline('\\text{octet}')})` : nm.shells.join(' , ')}</span>
           </div>
         </div>
       `;
     }
 
     /**
-     * Renderitzat vectorial del model de Bohr amb distribució escalonada per evitar solapaments
+     * Renderitzat vectorial del model de Bohr, nombres d'oxidació individuals (Pas 5) i fórmula (Pas 6)
      */
     function renderSVG(m, nm, st) {
       if (activeAnimationId) {
@@ -914,19 +927,40 @@
       const countNM = state.step <= 2 ? 1 : st.nNonmetal;
 
       const maxStack = Math.max(countM, countNM);
-      // Escala ajustada per mantenir claredat fins i tot amb 4 capes
       const scale = maxStack === 3 ? 0.56 : (maxStack === 2 ? 0.74 : 0.90);
 
-      // Coordenades base X separades vs juntes
-      const sepMetalX = 210;
-      const sepNonmetalX = 610;
+      const getAtomOffsets = (count, isMetal) => {
+        if (count === 1) return [{ dx: 0, y: 192 }];
+        if (count === 2) return [
+          { dx: 0, y: 112 },
+          { dx: 0, y: 272 }
+        ];
+        const shift = isMetal ? 58 : -58;
+        return [
+          { dx: -shift * 0.65, y: 80 },
+          { dx: shift * 0.85,  y: 192 },
+          { dx: -shift * 0.65, y: 304 }
+        ];
+      };
+
+      const metalOffsets = getAtomOffsets(countM, true);
+      const nonmetalOffsets = getAtomOffsets(countNM, false);
+
+      // Calculem el desplaçament màxim cap endins (dx) de cada grup perquè MAI se solapin en acostar-se al Pas 6
+      const maxMetalDx = Math.max(...metalOffsets.map(o => o.dx));
+      const minNonmetalDx = Math.min(...nonmetalOffsets.map(o => o.dx));
+
+      const sepMetalX = 215;
+      const sepNonmetalX = 605;
 
       const mOuterIonR = getShellRadius(m.shells.length - 2, scale);
       const nmOuterIonR = getShellRadius(nm.shells.length - 1, scale);
-      const touchDistance = mOuterIonR + nmOuterIonR + 22 * scale;
+      const safeGap = 24 * scale;
+      const minCenterSeparation = (maxMetalDx - minNonmetalDx) + mOuterIonR + nmOuterIonR + safeGap;
+
       const centerMid = 410;
-      const closeMetalX = centerMid - touchDistance / 2;
-      const closeNonmetalX = centerMid + touchDistance / 2;
+      const closeMetalX = centerMid - minCenterSeparation / 2;
+      const closeNonmetalX = centerMid + minCenterSeparation / 2;
 
       const isStep6 = state.step === 6;
       const targetMetalX = isStep6 ? closeMetalX : sepMetalX;
@@ -934,26 +968,6 @@
 
       const startMetalX = isStep6 ? sepMetalX : targetMetalX;
       const startNonmetalX = isStep6 ? sepNonmetalX : targetNonmetalX;
-
-      // Posicions (dx, y) escalonades quan hi ha 3 àtoms perquè MAI se solapin les capes
-      const getAtomOffsets = (count, isMetal) => {
-        if (count === 1) return [{ dx: 0, y: 195 }];
-        if (count === 2) return [
-          { dx: 0, y: 108 },
-          { dx: 0, y: 282 }
-        ];
-        // Quan hi ha 3 àtoms, formem un triangle escalonat (zig-zag horitzontal)
-        // L'àtom central s'avança lleugerament i els extrems es desplacen cap enfora
-        const shift = isMetal ? 62 : -62;
-        return [
-          { dx: -shift * 0.65, y: 74 },
-          { dx: shift * 0.85,  y: 195 },
-          { dx: -shift * 0.65, y: 316 }
-        ];
-      };
-
-      const metalOffsets = getAtomOffsets(countM, true);
-      const nonmetalOffsets = getAtomOffsets(countNM, false);
 
       const drawSceneAtPositions = (baseMetalX, baseNonmetalX, animProgress = 1) => {
         svg.innerHTML = '';
@@ -983,18 +997,34 @@
             isMetal: false,
             step: state.step
           });
+
+          // FASE 5: Etiqueta individual amb símbol + nombre d'oxidació a la dreta de cada anió, ben separada de l'escorça
+          if (state.step === 5) {
+            const labelX = nx + outerRadius + 56;
+            drawIndividualOxBadge(svg, labelX, ny, nm.symbol, `${Math.abs(nm.charge)}−`, false);
+          }
         });
 
         // 2. Dibuixar els METALLS
         metalOffsets.forEach((off) => {
+          const mx = baseMetalX + off.dx;
+          const my = off.y;
+          const ionOuterRadius = getShellRadius(m.shells.length - 2, scale);
+
           drawAtomBody(svg, {
             element: m,
-            cx: baseMetalX + off.dx,
-            cy: off.y,
+            cx: mx,
+            cy: my,
             scale,
             isMetal: true,
             step: state.step
           });
+
+          // FASE 5: Etiqueta individual amb símbol + nombre d'oxidació a l'esquerra de cada catió, ben separada de l'escorça
+          if (state.step === 5) {
+            const labelX = mx - ionOuterRadius - 56;
+            drawIndividualOxBadge(svg, labelX, my, m.symbol, `${m.charge}+`, true);
+          }
         });
 
         // 3. Dibuixar els electrons de valència del metall (sempre visibles en ambre)
@@ -1051,23 +1081,24 @@
           }
         });
 
-        // 4. Indicador visual d'atracció electrostàtica al pas 6
-        if (state.step === 6 && animProgress > 0.7) {
-          const alpha = (animProgress - 0.7) / 0.3;
+        // 4. FASE 6: Atracció electrostàtica i FÓRMULA DEL COMPOST RESULTANT
+        if (state.step === 6 && animProgress > 0.65) {
+          const alpha = (animProgress - 0.65) / 0.35;
           const gAttr = createSVG('g', { opacity: alpha.toFixed(2) });
-          const badgeW = 175;
-          const badgeH = 26;
-          const rect = createSVG('rect', {
-            x: centerMid - badgeW / 2,
+
+          const topW = 180;
+          const topH = 26;
+          gAttr.appendChild(createSVG('rect', {
+            x: centerMid - topW / 2,
             y: 12,
-            width: badgeW,
-            height: badgeH,
+            width: topW,
+            height: topH,
             rx: 13,
             fill: 'rgba(239, 68, 68, 0.14)',
             stroke: '#ef4444',
             'stroke-width': 1.5
-          });
-          const label = createSVG('text', {
+          }));
+          const topLabel = createSVG('text', {
             x: centerMid,
             y: 29,
             'text-anchor': 'middle',
@@ -1075,9 +1106,11 @@
             'font-size': '12.5px',
             'font-weight': 'bold'
           });
-          label.textContent = '⚡ Atracció electrostàtica';
-          gAttr.appendChild(rect);
-          gAttr.appendChild(label);
+          topLabel.textContent = '⚡ Atracció electrostàtica';
+          gAttr.appendChild(topLabel);
+
+          drawFormulaBanner(gAttr, centerMid, 362, m, nm, st);
+
           svg.appendChild(gAttr);
         }
       };
@@ -1110,6 +1143,136 @@
       } else {
         drawSceneAtPositions(targetMetalX, targetNonmetalX, 1);
       }
+    }
+
+    /**
+     * Dibuixa una targeta neta per a CADA catió/anió a la Fase 5, separada de l'escorça (ex: Na^{1+}, Cl^{1-})
+     */
+    function drawIndividualOxBadge(svg, cx, cy, symbol, oxStr, isMetal) {
+      const g = createSVG('g', {});
+      const boxW = 76;
+      const boxH = 32;
+
+      const bg = createSVG('rect', {
+        x: cx - boxW / 2,
+        y: cy - boxH / 2,
+        width: boxW,
+        height: boxH,
+        rx: 8,
+        fill: isMetal ? 'rgba(245, 158, 11, 0.16)' : 'rgba(6, 182, 212, 0.16)',
+        stroke: isMetal ? 'var(--metal-color)' : 'var(--nonmetal-color)',
+        'stroke-width': 1.7
+      });
+      g.appendChild(bg);
+
+      const textEl = createSVG('text', {
+        x: cx,
+        y: cy + 6,
+        'text-anchor': 'middle',
+        fill: 'var(--text-main)',
+        'font-weight': '800',
+        'font-size': '17px'
+      });
+
+      const tspanSym = createSVG('tspan', {});
+      tspanSym.textContent = symbol;
+
+      const tspanOx = createSVG('tspan', {
+        dy: '-6',
+        'font-size': '13px',
+        fill: isMetal ? '#ef4444' : '#2563eb'
+      });
+      tspanOx.textContent = oxStr;
+
+      textEl.appendChild(tspanSym);
+      textEl.appendChild(tspanOx);
+      g.appendChild(textEl);
+
+      svg.appendChild(g);
+    }
+
+    /**
+     * Dibuixa a la Fase 6 la fórmula resultant amb l'intercanvi explícit (ex: Na1Cl1 = NaCl)
+     */
+    function drawFormulaBanner(container, cx, cy, m, nm, st) {
+      const rawSubM = Math.abs(nm.charge);
+      const rawSubNM = m.charge;
+
+      const finalSubM = st.nMetal;
+      const finalSubNM = st.nNonmetal;
+
+      const needsSimplificationOrDropOne = (rawSubM === 1 || rawSubNM === 1 || rawSubM !== finalSubM || rawSubNM !== finalSubNM);
+
+      const boxW = needsSimplificationOrDropOne ? 360 : 250;
+      const boxH = 36;
+
+      container.appendChild(createSVG('rect', {
+        x: cx - boxW / 2,
+        y: cy - boxH / 2,
+        width: boxW,
+        height: boxH,
+        rx: 10,
+        fill: 'var(--bg-subtle)',
+        stroke: 'var(--primary)',
+        'stroke-width': 1.8
+      }));
+
+      const txt = createSVG('text', {
+        x: cx,
+        y: cy + 6,
+        'text-anchor': 'middle',
+        fill: 'var(--text-main)',
+        'font-size': '16px',
+        'font-weight': 'bold'
+      });
+
+      const tPrefix = createSVG('tspan', { fill: 'var(--text-muted)', 'font-size': '13.5px', 'font-weight': '600' });
+      tPrefix.textContent = 'Fórmula:   ';
+      txt.appendChild(tPrefix);
+
+      if (needsSimplificationOrDropOne) {
+        const tM1 = createSVG('tspan', { fill: 'var(--metal-color)' });
+        tM1.textContent = m.symbol;
+        txt.appendChild(tM1);
+
+        const tSubM1 = createSVG('tspan', { dy: '4', 'font-size': '12px', fill: 'var(--metal-color)' });
+        tSubM1.textContent = rawSubM;
+        txt.appendChild(tSubM1);
+
+        const tNM1 = createSVG('tspan', { dy: '-4', fill: 'var(--nonmetal-color)' });
+        tNM1.textContent = nm.symbol;
+        txt.appendChild(tNM1);
+
+        const tSubNM1 = createSVG('tspan', { dy: '4', 'font-size': '12px', fill: 'var(--nonmetal-color)' });
+        tSubNM1.textContent = rawSubNM;
+        txt.appendChild(tSubNM1);
+
+        const tEq = createSVG('tspan', { dy: '-4', fill: 'var(--text-main)' });
+        tEq.textContent = '  =  ';
+        txt.appendChild(tEq);
+      }
+
+      const tM2 = createSVG('tspan', { fill: 'var(--metal-color)', 'font-size': '18px' });
+      tM2.textContent = m.symbol;
+      txt.appendChild(tM2);
+
+      if (finalSubM > 1) {
+        const tSubM2 = createSVG('tspan', { dy: '4', 'font-size': '13px', fill: 'var(--metal-color)' });
+        tSubM2.textContent = finalSubM;
+        txt.appendChild(tSubM2);
+      }
+
+      const tNM2 = createSVG('tspan', { dy: finalSubM > 1 ? '-4' : '0', fill: 'var(--nonmetal-color)', 'font-size': '18px' });
+      tNM2.textContent = nm.symbol;
+      txt.appendChild(tNM2);
+
+      if (finalSubNM > 1) {
+        const tSubNM2 = createSVG('tspan', { dy: '4', 'font-size': '13px', fill: 'var(--nonmetal-color)' });
+        tSubNM2.textContent = finalSubNM;
+        txt.appendChild(tSubNM2);
+      }
+
+      container.appendChild(txt);
     }
 
     function getShellRadius(shellIndex, scale) {
@@ -1156,18 +1319,18 @@
       symText.textContent = element.symbol;
       g.appendChild(symText);
 
-      // Etiqueta de càrrega (+ o -) als passos 5 i 6
+      // Etiqueta circular de càrrega als passos 5 i 6
       if (isIon) {
         const chargeText = isMetal
-          ? (element.charge === 1 ? '+' : `${element.charge}+`)
-          : (element.charge === -1 ? '−' : `${Math.abs(element.charge)}−`);
+          ? `${element.charge}+`
+          : `${Math.abs(element.charge)}−`;
 
         const outerR = getShellRadius(visibleShellCount - 1, scale);
-        const badgeX = cx + (isMetal ? -outerR - 13 * scale : outerR + 13 * scale);
+        const badgeX = cx + (isMetal ? -outerR - 14 * scale : outerR + 14 * scale);
         const badgeY = cy - outerR + 4 * scale;
 
         const badgeBg = createSVG('circle', {
-          cx: badgeX, cy: badgeY - (4 * scale), r: 13.5 * scale,
+          cx: badgeX, cy: badgeY - (4 * scale), r: 14 * scale,
           fill: isMetal ? '#ef4444' : '#2563eb'
         });
         const badgeLabel = createSVG('text', {
@@ -1175,7 +1338,7 @@
           'text-anchor': 'middle',
           fill: '#ffffff',
           'font-weight': 'bold',
-          'font-size': `${13.5 * scale}px`
+          'font-size': `${12.5 * scale}px`
         });
         badgeLabel.textContent = chargeText;
         g.appendChild(badgeBg);
@@ -1247,7 +1410,6 @@
     function renderCrystalLattice3D(svg, m, nm, st) {
       const g = createSVG('g', {});
 
-      // Definim degradats esfèrics 3D per als cations i anions
       const defs = createSVG('defs', {});
       defs.innerHTML = `
         <radialGradient id="grad-cation" cx="35%" cy="30%" r="70%">
@@ -1263,8 +1425,8 @@
       `;
       svg.appendChild(defs);
 
-      const catCharge = m.charge === 1 ? '+' : `${m.charge}+`;
-      const anCharge = nm.charge === -1 ? '−' : `${Math.abs(nm.charge)}−`;
+      const catCharge = `${m.charge}+`;
+      const anCharge = `${Math.abs(nm.charge)}−`;
 
       const title = createSVG('text', {
         x: 410, y: 26, 'text-anchor': 'middle',
@@ -1273,22 +1435,16 @@
       title.textContent = `Xarxa cristal·lina 3D en perspectiva cavallera · Proporció ${st.nMetal}:${st.nNonmetal} (${m.symbol}${st.nMetal > 1 ? st.nMetal : ''}${nm.symbol}${st.nNonmetal > 1 ? st.nNonmetal : ''})`;
       g.appendChild(title);
 
-      // Paràmetres de projecció cavallera:
-      // Eix X -> horitzontal dreta
-      // Eix Y -> vertical avall
-      // Eix Z -> profunditat en diagonal (angle 38°, factor de reducció 0.58)
       const angleCav = (38 * Math.PI) / 180;
       const kCav = 0.58;
       const cosCav = Math.cos(angleCav) * kCav;
       const sinCav = Math.sin(angleCav) * kCav;
 
-      // Construcció de la xarxa 3D (x, y, z, isCation) segons l'estequiometria
       let nodes3D = [];
       let spacingX = 72, spacingY = 66, spacingZ = 72;
       let maxNeighborDist = 85;
 
       if (st.nMetal === 1 && st.nNonmetal === 1) {
-        // Estructura tipus NaCl (cúbica centrada en les cares alternada, 3x3x3 = 27 nodes -> 14:13, o 4x3x2 = 24 nodes -> 12:12 exacte!)
         const nx = 4, ny = 3, nz = 2;
         spacingX = 82; spacingY = 74; spacingZ = 82;
         maxNeighborDist = 90;
@@ -1305,8 +1461,6 @@
           }
         }
       } else if ((st.nMetal === 1 && st.nNonmetal === 2) || (st.nMetal === 2 && st.nNonmetal === 1)) {
-        // Estructura tipus Fluorita / Antifluorita (proporció exacta 1:2 o 2:1)
-        // 6 cel·les elementals en 3D (3 en X, 2 en Z): cada cel·la té 1 ió minoritari central i 2 ions majoritaris oposats en 3D
         const majorityIsCation = (st.nMetal === 2);
         spacingX = 115; spacingZ = 115;
         maxNeighborDist = 85;
@@ -1315,15 +1469,12 @@
             const cx = ix * spacingX;
             const cz = iz * spacingZ;
             const cy = 65;
-            // Ió minoritari al centre de la cel·la
             nodes3D.push({ x: cx, y: cy, z: cz, isCation: !majorityIsCation });
-            // Dos ions majoritaris coordinats en diagonal espacial (dalt-davant i baix-darrere)
             nodes3D.push({ x: cx - 36, y: cy - 42, z: cz - 28, isCation: majorityIsCation });
             nodes3D.push({ x: cx + 36, y: cy + 42, z: cz + 28, isCation: majorityIsCation });
           }
         }
       } else if ((st.nMetal === 3 && st.nNonmetal === 1) || (st.nMetal === 1 && st.nNonmetal === 3)) {
-        // Proporció 3:1 o 1:3 (ex: Li3N): 4 plans/cel·les 3D amb 1 ió minoritari i 3 majoritaris coordinats
         const majorityIsCation = (st.nMetal === 3);
         spacingX = 135; spacingZ = 120;
         maxNeighborDist = 92;
@@ -1339,7 +1490,6 @@
           }
         }
       } else {
-        // Proporció 3:2 (ex: Ca3N2, Mg3P2): 4 cel·les 3D en 2x2 amb 3 cations i 2 anions cadascuna (12 cations : 8 anions = 3:2 exacte!)
         spacingX = 165; spacingZ = 135;
         maxNeighborDist = 96;
         for (let ix = 0; ix < 2; ix++) {
@@ -1347,10 +1497,8 @@
             const cx = ix * spacingX;
             const cz = iz * spacingZ;
             const cy = 70;
-            // 2 Anions (N3- / P3-)
             nodes3D.push({ x: cx - 38, y: cy, z: cz - 18, isCation: false });
             nodes3D.push({ x: cx + 38, y: cy, z: cz + 18, isCation: false });
-            // 3 Cations (Ca2+ / Mg2+) en disposició triangular 3D envoltant els anions
             nodes3D.push({ x: cx,      y: cy - 52, z: cz,      isCation: true });
             nodes3D.push({ x: cx - 58, y: cy + 48, z: cz + 26, isCation: true });
             nodes3D.push({ x: cx + 58, y: cy + 48, z: cz - 26, isCation: true });
@@ -1358,7 +1506,6 @@
         }
       }
 
-      // Projectar tots els nodes 3D a coordenades 2D cavallera i centrar-los a l'escenari
       const projected = nodes3D.map((n, idx) => {
         const px = n.x + n.z * cosCav;
         const py = n.y - n.z * sinCav;
@@ -1378,10 +1525,8 @@
         p.sy = p.py + offsetY;
       });
 
-      // Ordenar per profunditat (painter's algorithm: primer els de Z més gran, que són al fons)
       projected.sort((a, b) => b.z - a.z || a.y - b.y);
 
-      // 1. Dibuixar les varetes d'enllaç electrostàtic 3D entre ions de signe oposat propers
       for (let i = 0; i < projected.length; i++) {
         for (let j = i + 1; j < projected.length; j++) {
           const a = projected[i];
@@ -1404,7 +1549,6 @@
         }
       }
 
-      // 2. Dibuixar les esferes 3D ordenades de fons cap endavant
       let catCount = 0;
       let anCount = 0;
 
@@ -1412,13 +1556,11 @@
         if (p.isCation) catCount++;
         else anCount++;
 
-        // Lleugera escala de profunditat per accentuar el relleu 3D
         const depthFactor = p.z > 60 ? 0.90 : 1.04;
         const radius = (p.isCation ? 17.5 : 23.5) * depthFactor;
         const fillUrl = p.isCation ? 'url(#grad-cation)' : 'url(#grad-anion)';
         const label = p.isCation ? `${m.symbol}${catCharge}` : `${nm.symbol}${anCharge}`;
 
-        // Ombra subtil de l'esfera
         const sphere = createSVG('circle', {
           cx: p.sx,
           cy: p.sy,
@@ -1435,13 +1577,12 @@
           'text-anchor': 'middle',
           fill: '#0f172a',
           'font-weight': 'bold',
-          'font-size': `${(p.isCation ? 10.5 : 11.5) * depthFactor}px`
+          'font-size': `${(p.isCation ? 10 : 11) * depthFactor}px`
         });
         txt.textContent = label;
         g.appendChild(txt);
       });
 
-      // Llegenda d'eixos cavallera a la cantonada inferior esquerra
       const axX = 55, axY = 355;
       const gAxes = createSVG('g', { opacity: '0.75' });
       gAxes.appendChild(createSVG('line', { x1: axX, y1: axY, x2: axX + 26, y2: axY, stroke: 'var(--text-muted)', 'stroke-width': 1.5 }));
@@ -1452,7 +1593,6 @@
       gAxes.appendChild(axLbl);
       g.appendChild(gAxes);
 
-      // Nota inferior amb el recompte exacte
       const note = createSVG('text', {
         x: 435, y: 374, 'text-anchor': 'middle',
         fill: 'var(--text-muted)', 'font-size': '12.5px'
